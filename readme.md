@@ -10,9 +10,9 @@ var miss = require('mississippi')
 
 ## methods
 
-### `pipe`
+### pipe
 
-#### `miss.pipe(stream1, stream2, stream3, ..., cb)`
+##### `miss.pipe(stream1, stream2, stream3, ..., cb)`
 
 Pipes streams together and destroys all of them if one of them closes. Calls `cb` with `(error)` if there was an error in any of the streams.
 
@@ -26,7 +26,7 @@ When using standard `source.pipe(destination)` the source will _not_ be destroye
 
 #### example
 
-```
+```js
 // lets do a simple file copy
 var fs = require('fs')
 
@@ -40,9 +40,9 @@ miss.pipe(read, write, function (err) {
 })
 ```
 
-### `pipeline`
+### pipeline
 
-#### `var pipeline = miss.pipeline(stream1, stream2, stream3, ...)`
+##### `var pipeline = miss.pipeline(stream1, stream2, stream3, ...)`
 
 builds a pipeline from all the transform streams passed in as arguments by piping them together and returning a single stream object that lets you write to the first stream and read from the last stream
 
@@ -54,7 +54,7 @@ if any of the streams in the pipeline emits an error or gets destroyed, or you d
 
 #### example
 
-```
+```js
 // first create some individual transform streams (note: these two modules are fictional)
 var imageResize = require('image-resizer-stream')({width: 400})
 var pngOptimizer = require('png-optimizer-stream')({quality: 60})
@@ -76,15 +76,15 @@ miss.pipe(read, resizeAndOptimize, write, function (err) {
 })
 ```
 
-### `duplex`
+### duplex
 
 todo
 
-### `through`
+### through
 
 todo
 
-### `concat`
+### concat
 
 todo
 
