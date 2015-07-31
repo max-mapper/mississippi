@@ -93,12 +93,14 @@ you can either choose to supply the writable and the readable at the time you cr
 #### example
 
 ```js
-// lets spawn a process and take its stdout and stdin and combine them into one stream
+// lets spawn a process and take its stdout and stdin and combine them into 1 stream
 var child = require('child_process')
-var curl = child.spawn('curl -X POST --data-binary @- http://foo.com') // @- tells it to read from stdin
 
-var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
+// @- tells it to read from stdin, --data-binary sets 'raw' binary mode
+var curl = child.spawn('curl -X POST --data-binary @- http://foo.com')
+
 // duplexCurl will write to stdin and read from stdout
+var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
 ```
 
 ### through
