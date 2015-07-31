@@ -78,7 +78,28 @@ miss.pipe(read, resizeAndOptimize, write, function (err) {
 
 ### duplex
 
-todo
+##### `var duplex = miss.duplex([writable, readable, opts])`
+
+take two separate streams, a writable and a readable, and turn them into a single duplex (readable and writable) stream
+
+the returned stream will emit data from the readable, and when you write to it, it writes to the readable
+
+you can either choose to supply the writable and the readable at the time you create the stream, or you can do it later using the `.setWritable` and `.setReadable` methods, and data written to the stream in the meantime will be buffered for you
+
+#### original module
+
+`miss.duplex` is provided by [`require('duplexify')`](https://npmjs.org/duplexify)
+
+#### example
+
+```js
+// lets spawn a process and take its stdout and stdin and combine them into one stream
+var child = require('child_process')
+var curl = child.spawn('curl -X POST --data-binary @- http://foo.com') // @- tells it to read from stdin
+
+var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
+// duplexCurl will write to stdin and read from stdout
+```
 
 ### through
 

@@ -1,4 +1,4 @@
-module.exports.combine = require('pumpify')
+module.exports.pipeline = require('pumpify')
 module.exports.pipe = require('pump')
 module.exports.duplex = require('duplexify')
 module.exports.through = require('through2')
