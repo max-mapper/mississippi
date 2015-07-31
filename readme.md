@@ -2,6 +2,8 @@
 
 a collection of useful stream utility modules. learn how the modules work using this and then pick the ones you want and use them individually
 
+the goal of the modules included in mississippi is to make working with streams easy without sacrificing speed, error handling or composability.
+
 ## usage
 
 ```js
@@ -9,6 +11,12 @@ var miss = require('mississippi')
 ```
 
 ## methods
+
+- [pipe](#pipe)
+- [pipeline](#pipeline)
+- [duplex](#duplex)
+- [through](#through)
+- [concat](#concat)
 
 ### pipe
 
