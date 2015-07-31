@@ -1,0 +1,5 @@
+module.exports.combine = require('pumpify')
+module.exports.pipe = require('pump')
+module.exports.duplex = require('duplexify')
+module.exports.through = require('through2')
+module.exports.concat = require('concat-stream')
