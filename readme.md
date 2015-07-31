@@ -55,14 +55,15 @@ if any of the streams in the pipeline emits an error or gets destroyed, or you d
 #### example
 
 ```js
-// first create some individual transform streams (note: these two modules are fictional)
+// first create some transform streams (note: these two modules are fictional)
 var imageResize = require('image-resizer-stream')({width: 400})
 var pngOptimizer = require('png-optimizer-stream')({quality: 60})
 
 // instead of doing a.pipe(b), use pipelin
 var resizeAndOptimize = miss.pipeline(imageResize, pngOptimizer)
-// `resizeAndOptimize` is a transform stream. when you write to it, it writes to `imageResize`. when you
-// read from it, it reads from `pngOptimizer`. it handles piping all the streams together for you
+// `resizeAndOptimize` is a transform stream. when you write to it, it writes
+// to `imageResize`. when you read from it, it reads from `pngOptimizer`.
+// it handles piping all the streams together for you
 
 // use it like any other transform stream
 var fs = require('fs')
