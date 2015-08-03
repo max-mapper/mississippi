@@ -91,7 +91,7 @@ miss.pipe(read, resizeAndOptimize, write, function (err) {
 
 take two separate streams, a writable and a readable, and turn them into a single duplex (readable and writable) stream
 
-the returned stream will emit data from the readable, and when you write to it, it writes to the readable
+the returned stream will emit data from the readable, and when you write to it, it writes to the writable
 
 you can either choose to supply the writable and the readable at the time you create the stream, or you can do it later using the `.setWritable` and `.setReadable` methods, and data written to the stream in the meantime will be buffered for you
 
