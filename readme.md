@@ -114,7 +114,43 @@ var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
 
 ### through
 
-todo
+#####`var transformer = miss.through([options, transformFunction, flushFunction])`
+
+make a custom [transform stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_transform) without explicit subclassing
+
+the `options` object is passed to the internal transform stream and can be used to create an objectMode stream (or use the shortcut `miss.through.obj([...])`)
+
+the `transformFunction` is called when data is available for the writable side and has the signature `function (chunk, encoding, cb) {}`. Within the function, add data to the readable side any number of times with `this.push(data)`. Call `cb()` to indicate processing of the `chunk` is complete. Or to easily emit a single error or chunk, call `cb(err, chunk)`
+
+the `flushFunction`, with signature `function (cb) {}`, is called just before the stream is complete and should be used to wrap up stream processing or emit a sentinel value
+
+#### original module
+
+`miss.through` is provided by [`require('through2')`](https://npmjs.org/through2)
+
+#### example
+
+```js
+var fs = require('fs')
+
+var read = fs.createReadStream('./boring_lowercase.txt')
+var write = fs.createWriteStream('./AWESOMECASE.TXT')
+
+//Leaving out the options object
+var uppercaser = miss.through(
+  function (chunk, enc, cb) {
+    cb(chunk.toString().toUpperCase())  
+  },
+  function (cb) {
+    cb('ONE LAST BIT OF UPPERCASE')  
+  }
+)
+
+miss.pipe(read, uppercaser, write, function (err) {
+  if (err) return console.error('Trouble uppercasing!')
+  console.log('Splendid uppercasing!')
+})
+```
 
 ### concat
 
