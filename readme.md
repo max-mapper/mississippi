@@ -13,10 +13,12 @@ var miss = require('mississippi')
 ## methods
 
 - [pipe](#pipe)
+- [each](#each)
 - [pipeline](#pipeline)
 - [duplex](#duplex)
 - [through](#through)
 - [concat](#concat)
+- [finished](#finished)
 
 ### pipe
 
@@ -48,13 +50,48 @@ miss.pipe(read, write, function (err) {
 })
 ```
 
+### each
+
+##### `miss.each(stream, each, [done])`
+
+Iterate the data in `stream` one chunk at a time. Your `each` function will be called with with `(data, next)` where data is a data chunk and next is a callback. Call `next` when you are ready to consume the next chunk.
+
+Optionally you can call `next` with an error to destroy the stream. You can also pass the optional third argument, `done`, which is a function that will be called with `(err)` when the stream ends. The `err` argument will be populated with an error if the stream emitted an error.
+
+#### original module
+
+`miss.each` is provided by [`require('stream-each')`](https://npmjs.org/stream-each)
+
+#### example
+
+```js
+var fs = require('fs')
+var split = require('split2')
+
+var newLineSeparatedNumbers = fs.createReadStream('numbers.txt')
+
+var pipeline = miss.pipeline(newLineSeparatedNumbers, split())
+var each = miss.each(pipeline, eachLine, done)
+var sum = 0
+
+function eachLine (line, next) {
+  sum += parseInt(line.toString())
+  next()
+}
+
+function done (err) {
+  if (err) throw err
+  console.log('sum is', sum)
+}
+```
+
 ### pipeline
 
 ##### `var pipeline = miss.pipeline(stream1, stream2, stream3, ...)`
 
-builds a pipeline from all the transform streams passed in as arguments by piping them together and returning a single stream object that lets you write to the first stream and read from the last stream
+Builds a pipeline from all the transform streams passed in as arguments by piping them together and returning a single stream object that lets you write to the first stream and read from the last stream.
 
-if any of the streams in the pipeline emits an error or gets destroyed, or you destroy the stream it returns, all of the streams will be destroyed and cleaned up for you
+If any of the streams in the pipeline emits an error or gets destroyed, or you destroy the stream it returns, all of the streams will be destroyed and cleaned up for you.
 
 #### original module
 
@@ -89,11 +126,11 @@ miss.pipe(read, resizeAndOptimize, write, function (err) {
 
 ##### `var duplex = miss.duplex([writable, readable, opts])`
 
-take two separate streams, a writable and a readable, and turn them into a single duplex (readable and writable) stream
+Take two separate streams, a writable and a readable, and turn them into a single duplex (readable and writable) stream.
 
-the returned stream will emit data from the readable, and when you write to it, it writes to the writable
+The returned stream will emit data from the readable. When you write to it it writes to the writable.
 
-you can either choose to supply the writable and the readable at the time you create the stream, or you can do it later using the `.setWritable` and `.setReadable` methods, and data written to the stream in the meantime will be buffered for you
+You can either choose to supply the writable and the readable at the time you create the stream, or you can do it later using the `.setWritable` and `.setReadable` methods and data written to the stream in the meantime will be buffered for you.
 
 #### original module
 
@@ -116,13 +153,13 @@ var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
 
 #####`var transformer = miss.through([options, transformFunction, flushFunction])`
 
-make a custom [transform stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_transform) without explicit subclassing
+Make a custom [transform stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_transform).
 
-the `options` object is passed to the internal transform stream and can be used to create an objectMode stream (or use the shortcut `miss.through.obj([...])`)
+The `options` object is passed to the internal transform stream and can be used to create an `objectMode` stream (or use the shortcut `miss.through.obj([...])`)
 
-the `transformFunction` is called when data is available for the writable side and has the signature `function (chunk, encoding, cb) {}`. Within the function, add data to the readable side any number of times with `this.push(data)`. Call `cb()` to indicate processing of the `chunk` is complete. Or to easily emit a single error or chunk, call `cb(err, chunk)`
+The `transformFunction` is called when data is available for the writable side and has the signature `(chunk, encoding, cb)`. Within the function, add data to the readable side any number of times with `this.push(data)`. Call `cb()` to indicate processing of the `chunk` is complete. Or to easily emit a single error or chunk, call `cb(err, chunk)`
 
-the `flushFunction`, with signature `function (cb) {}`, is called just before the stream is complete and should be used to wrap up stream processing or emit a sentinel value
+The `flushFunction`, with signature `(cb)`, is called just before the stream is complete and should be used to wrap up stream processing.
 
 #### original module
 
@@ -136,7 +173,7 @@ var fs = require('fs')
 var read = fs.createReadStream('./boring_lowercase.txt')
 var write = fs.createWriteStream('./AWESOMECASE.TXT')
 
-//Leaving out the options object
+// Leaving out the options object
 var uppercaser = miss.through(
   function (chunk, enc, cb) {
     cb(chunk.toString().toUpperCase())  
@@ -154,5 +191,63 @@ miss.pipe(read, uppercaser, write, function (err) {
 
 ### concat
 
-todo
+#####`var concat = miss.concat(cb)`
 
+Returns a writable stream that concatenates all data written to the stream and calls a callback with the single result.
+
+Calling `miss.concat(cb)` returns a writable stream. `cb` is called when the writable stream is finished, e.g. when all data is done being written to it. `cb` is called with a single argument, `(data)`, which will containe the result of concatenating all the data written to the stream.
+
+Note that `miss.concat` will not handle stream errors for you. To handle errors, use `miss.pipe` or handle the `error` event manually.
+
+#### original module
+
+`miss.concat` is provided by [`require('concat-stream')`](https://npmjs.org/concat-stream)
+
+#### example
+
+```js
+var fs = require('fs')
+var concat = require('concat-stream')
+ 
+var readStream = fs.createReadStream('cat.png')
+var concatStream = concat(gotPicture)
+ 
+readStream.on('error', handleError)
+readStream.pipe(concatStream)
+ 
+function gotPicture(imageBuffer) {
+  // imageBuffer is all of `cat.png` as a node.js Buffer 
+}
+ 
+function handleError(err) {
+  // handle your error appropriately here, e.g.: 
+  console.error(err) // print the error to STDERR 
+  process.exit(1) // exit program with non-zero exit code 
+}
+```
+
+### finished
+
+#####`miss.finished(stream, cb)`
+
+Waits for `stream` to finish or error and then calls `cb` with `(err)`. `cb` will only be called once. `err` will be null if the stream finished without error, or else it will be populated with the error from the streams `error` event.
+
+This function is useful for simplifying stream handling code as it lets you handle success or error conditions in a single code path. It's used internally `miss.pipe`.
+
+#### original module
+
+`miss.finished` is provided by [`require('end-of-stream')`](https://npmjs.org/end-of-stream)
+
+#### example
+
+```js
+var copySource = fs.createReadStream('./movie.mp4')
+var copyDest = fs.createWriteStream('./movie-copy.mp4')
+
+copySource.pipe(copyDest)
+
+miss.finished(copyDest, function(err) {
+  if (err) return console.log('write failed', err)
+  console.log('write success')
+})
+```

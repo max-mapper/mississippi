@@ -11,8 +11,10 @@
   "dependencies": {
     "concat-stream": "^1.5.0",
     "duplexify": "^3.4.2",
+    "end-of-stream": "^1.1.0",
     "pump": "^1.0.0",
     "pumpify": "^1.3.3",
+    "stream-each": "^1.1.0",
     "through2": "^2.0.0"
   }
 }
