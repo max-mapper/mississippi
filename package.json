@@ -16,5 +16,14 @@
     "pumpify": "^1.3.3",
     "stream-each": "^1.1.0",
     "through2": "^2.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxogden/mississippi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxogden/mississippi/issues"
+  },
+  "homepage": "https://github.com/maxogden/mississippi#readme"
 }
