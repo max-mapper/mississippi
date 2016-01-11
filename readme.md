@@ -17,6 +17,8 @@ var miss = require('mississippi')
 - [pipeline](#pipeline)
 - [duplex](#duplex)
 - [through](#through)
+- [from](#from)
+- [to](#to)
 - [concat](#concat)
 - [finished](#finished)
 
@@ -126,7 +128,7 @@ miss.pipe(read, resizeAndOptimize, write, function (err) {
 
 ##### `var duplex = miss.duplex([writable, readable, opts])`
 
-Take two separate streams, a writable and a readable, and turn them into a single duplex (readable and writable) stream.
+Take two separate streams, a writable and a readable, and turn them into a single [duplex (readable and writable) stream](https://nodejs.org/api/stream.html#stream_class_stream_duplex).
 
 The returned stream will emit data from the readable. When you write to it it writes to the writable.
 
@@ -176,10 +178,10 @@ var write = fs.createWriteStream('./AWESOMECASE.TXT')
 // Leaving out the options object
 var uppercaser = miss.through(
   function (chunk, enc, cb) {
-    cb(chunk.toString().toUpperCase())  
+    cb(chunk.toString().toUpperCase())
   },
   function (cb) {
-    cb('ONE LAST BIT OF UPPERCASE')  
+    cb('ONE LAST BIT OF UPPERCASE')
   }
 )
 
@@ -187,6 +189,103 @@ miss.pipe(read, uppercaser, write, function (err) {
   if (err) return console.error('Trouble uppercasing!')
   console.log('Splendid uppercasing!')
 })
+```
+
+### from
+
+#####`miss.from([opts], read)`
+
+Make a custom [readable stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_readable).
+
+`opts` contains the options to pass on to the ReadableStream constructor e.g. for creating a readable object stream (or use the shortcut `miss.from.obj([...])`).
+
+Returns a readable stream that calls `read(size, next)` when data is requested from the stream.
+
+- `size` is the recommended amount of data (in bytes) to retrieve.
+- `next(err, chunk)` should be called when you're ready to emit more data.
+
+#### original module
+
+`miss.from` is provided by [`require('from2')`](https://npmjs.org/from2)
+
+#### example
+
+```js
+
+
+function fromString(string) {
+  return miss.from(function(size, next) {
+    // if there's no more content
+    // left in the string, close the stream.
+    if (string.length <= 0) return next(null, null)
+
+    // Pull in a new chunk of text,
+    // removing it from the string.
+    var chunk = string.slice(0, size)
+    string = string.slice(size)
+
+    // Emit "chunk" from the stream.
+    next(null, chunk)
+  })
+}
+
+// pipe "hello world" out
+// to stdout.
+fromString('hello world').pipe(process.stdout)
+```
+
+### to
+
+#####`miss.to([options], write, [flush])`
+
+Make a custom [writable stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_writable).
+
+`opts` contains the options to pass on to the WritableStream constructor e.g. for creating a readable object stream (or use the shortcut `miss.to.obj([...])`).
+
+Returns a writable stream that calls `write(data, enc, cb)` when data is written to the stream.
+
+- `data` is the received data to write the destination.
+- `enc` encoding of the piece of data received.
+- `next(err, chunk)` should be called when you're ready to write more data, or encountered an error.
+
+`flush(cb)` is called before `finish` is emitted and allows for cleanup steps to occur.
+
+#### original module
+
+`miss.to` is provided by [`require('flush-write-stream')`](https://npmjs.org/flush-write-stream)
+
+#### example
+
+```js
+var ws = miss.to(write, flush)
+
+ws.on('finish', function () {
+  console.log('finished')
+})
+
+ws.write('hello')
+ws.write('world')
+ws.end()
+
+function write (data, enc, cb) {
+  // i am your normal ._write method
+  console.log('writing', data.toString())
+  cb()
+}
+
+function flush (cb) {
+  // i am called before finish is emitted
+  setTimeout(cb, 1000) // wait 1 sec
+}
+```
+
+If you run the above it will produce the following output
+
+```
+writing hello
+writing world
+(nothing happens for 1 sec)
+finished
 ```
 
 ### concat
@@ -208,21 +307,21 @@ Note that `miss.concat` will not handle stream errors for you. To handle errors,
 ```js
 var fs = require('fs')
 var concat = require('concat-stream')
- 
+
 var readStream = fs.createReadStream('cat.png')
 var concatStream = concat(gotPicture)
- 
+
 readStream.on('error', handleError)
 readStream.pipe(concatStream)
- 
+
 function gotPicture(imageBuffer) {
-  // imageBuffer is all of `cat.png` as a node.js Buffer 
+  // imageBuffer is all of `cat.png` as a node.js Buffer
 }
- 
+
 function handleError(err) {
-  // handle your error appropriately here, e.g.: 
-  console.error(err) // print the error to STDERR 
-  process.exit(1) // exit program with non-zero exit code 
+  // handle your error appropriately here, e.g.:
+  console.error(err) // print the error to STDERR
+  process.exit(1) // exit program with non-zero exit code
 }
 ```
 
@@ -251,3 +350,4 @@ miss.finished(copyDest, function(err) {
   console.log('write success')
 })
 ```
+
