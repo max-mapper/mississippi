@@ -28,7 +28,7 @@ var miss = require('mississippi')
 
 Pipes streams together and destroys all of them if one of them closes. Calls `cb` with `(error)` if there was an error in any of the streams.
 
-When using standard `source.pipe(destination)` the source will _not_ be destroyed if the destination emits close or error. You are also not able to provide a callback to tell when then pipe has finished.
+When using standard `source.pipe(destination)` the source will _not_ be destroyed if the destination emits close or error. You are also not able to provide a callback to tell when the pipe has finished.
 
 `miss.pipe` does these two things for you, ensuring you handle stream errors 100% of the time (unhandled errors are probably the most common bug in most node streams code)
 
@@ -56,7 +56,7 @@ miss.pipe(read, write, function (err) {
 
 ##### `miss.each(stream, each, [done])`
 
-Iterate the data in `stream` one chunk at a time. Your `each` function will be called with with `(data, next)` where data is a data chunk and next is a callback. Call `next` when you are ready to consume the next chunk.
+Iterate the data in `stream` one chunk at a time. Your `each` function will be called with `(data, next)` where data is a data chunk and next is a callback. Call `next` when you are ready to consume the next chunk.
 
 Optionally you can call `next` with an error to destroy the stream. You can also pass the optional third argument, `done`, which is a function that will be called with `(err)` when the stream ends. The `err` argument will be populated with an error if the stream emitted an error.
 
@@ -350,4 +350,3 @@ miss.finished(copyDest, function(err) {
   console.log('write success')
 })
 ```
-
