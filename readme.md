@@ -178,10 +178,10 @@ var write = fs.createWriteStream('./AWESOMECASE.TXT')
 // Leaving out the options object
 var uppercaser = miss.through(
   function (chunk, enc, cb) {
-    cb(chunk.toString().toUpperCase())
+    cb(null, chunk.toString().toUpperCase())
   },
   function (cb) {
-    cb('ONE LAST BIT OF UPPERCASE')
+    cb(null, 'ONE LAST BIT OF UPPERCASE')
   }
 )
 
