@@ -306,13 +306,11 @@ Note that `miss.concat` will not handle stream errors for you. To handle errors,
 
 ```js
 var fs = require('fs')
-var concat = require('concat-stream')
 
 var readStream = fs.createReadStream('cat.png')
-var concatStream = concat(gotPicture)
+var concatStream = miss.concat(gotPicture)
 
-readStream.on('error', handleError)
-readStream.pipe(concatStream)
+miss.pipe(readStream, concatStream, handleError)
 
 function gotPicture(imageBuffer) {
   // imageBuffer is all of `cat.png` as a node.js Buffer
