@@ -34,7 +34,7 @@ When using standard `source.pipe(destination)` the source will _not_ be destroye
 
 #### original module
 
-`miss.pipe` is provided by [`require('pump')`](https://npmjs.org/pump)
+`miss.pipe` is provided by [`require('pump')`](https://www.npmjs.com/package/pump)
 
 #### example
 
@@ -62,7 +62,7 @@ Optionally you can call `next` with an error to destroy the stream. You can also
 
 #### original module
 
-`miss.each` is provided by [`require('stream-each')`](https://npmjs.org/stream-each)
+`miss.each` is provided by [`require('stream-each')`](https://www.npmjs.com/package/stream-each)
 
 #### example
 
@@ -97,7 +97,7 @@ If any of the streams in the pipeline emits an error or gets destroyed, or you d
 
 #### original module
 
-`miss.pipeline` is provided by [`require('pumpify')`](https://npmjs.org/pumpify)
+`miss.pipeline` is provided by [`require('pumpify')`](https://www.npmjs.com/package/pumpify)
 
 #### example
 
@@ -136,7 +136,7 @@ You can either choose to supply the writable and the readable at the time you cr
 
 #### original module
 
-`miss.duplex` is provided by [`require('duplexify')`](https://npmjs.org/duplexify)
+`miss.duplex` is provided by [`require('duplexify')`](https://www.npmjs.com/package/duplexify)
 
 #### example
 
@@ -165,7 +165,7 @@ The `flushFunction`, with signature `(cb)`, is called just before the stream is 
 
 #### original module
 
-`miss.through` is provided by [`require('through2')`](https://npmjs.org/through2)
+`miss.through` is provided by [`require('through2')`](https://www.npmjs.com/package/through2)
 
 #### example
 
@@ -206,7 +206,7 @@ Returns a readable stream that calls `read(size, next)` when data is requested f
 
 #### original module
 
-`miss.from` is provided by [`require('from2')`](https://npmjs.org/from2)
+`miss.from` is provided by [`require('from2')`](https://www.npmjs.com/package/from2)
 
 #### example
 
@@ -252,7 +252,7 @@ Returns a writable stream that calls `write(data, enc, cb)` when data is written
 
 #### original module
 
-`miss.to` is provided by [`require('flush-write-stream')`](https://npmjs.org/flush-write-stream)
+`miss.to` is provided by [`require('flush-write-stream')`](https://www.npmjs.com/package/flush-write-stream)
 
 #### example
 
@@ -300,7 +300,7 @@ Note that `miss.concat` will not handle stream errors for you. To handle errors,
 
 #### original module
 
-`miss.concat` is provided by [`require('concat-stream')`](https://npmjs.org/concat-stream)
+`miss.concat` is provided by [`require('concat-stream')`](https://www.npmjs.com/package/concat-stream)
 
 #### example
 
@@ -335,7 +335,7 @@ This function is useful for simplifying stream handling code as it lets you hand
 
 #### original module
 
-`miss.finished` is provided by [`require('end-of-stream')`](https://npmjs.org/end-of-stream)
+`miss.finished` is provided by [`require('end-of-stream')`](https://www.npmjs.com/package/end-of-stream)
 
 #### example
 
