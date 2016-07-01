@@ -4,6 +4,8 @@ a collection of useful stream utility modules. learn how the modules work using 
 
 the goal of the modules included in mississippi is to make working with streams easy without sacrificing speed, error handling or composability.
 
+see also [awesome-nodejs-streams](https://github.com/thejmazz/awesome-nodejs-streams)
+
 ## usage
 
 ```js
