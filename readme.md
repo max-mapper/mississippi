@@ -73,7 +73,7 @@ var split = require('split2')
 var newLineSeparatedNumbers = fs.createReadStream('numbers.txt')
 
 var pipeline = miss.pipeline(newLineSeparatedNumbers, split())
-var each = miss.each(pipeline, eachLine, done)
+miss.each(pipeline, eachLine, done)
 var sum = 0
 
 function eachLine (line, next) {
