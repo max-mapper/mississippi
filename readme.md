@@ -21,6 +21,7 @@ var miss = require('mississippi')
 - [to](#to)
 - [concat](#concat)
 - [finished](#finished)
+- [parallel](#parallel)
 
 ### pipe
 
@@ -351,3 +352,43 @@ miss.finished(copyDest, function(err) {
 })
 ```
 
+### parallel
+
+#####`miss.parallel(concurrency, each)`
+
+This works like `through` except you can process items in parallel, while still preserving the original input order.
+
+This is handy if you wanna take advantage of node's async I/O and process streams of items in batches. With this module you can build your very own streaming parallel job queue.
+
+Note that `miss.parallel` preserves input ordering, if you don't need that then you can use [through2-concurrent](https://github.com/almost/through2-concurrent) instead, which is very similar to this otherwise.
+
+#### original module
+
+`miss.parallel` is provided by [`require('parallel-transform')`](https://npmjs.org/parallel-transform)
+
+#### example
+
+This example fetches the GET HTTP headers for a stream of input URLs 5 at a time in parallel.
+
+```js
+function getResponse (item, cb) {
+  var r = request(item.url)
+  r.on('error', function (err) {
+    cb(err)
+  })
+  r.on('response', function (re) {
+    cb(null, {url: item.url, date: new Date(), status: re.statusCode, headers: re.headers})
+    r.abort()
+  })  
+}
+
+miss.pipe(
+  fs.createReadStream('./urls.txt'), // one url per line
+  split(),
+  miss.parallel(5, getResponse),
+  miss.through(function (row, enc, next) {
+    console.log(JSON.stringify(row))
+    next()
+  })
+)
+```
