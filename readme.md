@@ -154,7 +154,7 @@ var duplexCurl = miss.duplex(curl.stdin, curl.stdout)
 
 ### through
 
-#####`var transformer = miss.through([options, transformFunction, flushFunction])`
+##### `var transformer = miss.through([options, transformFunction, flushFunction])`
 
 Make a custom [transform stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_transform).
 
@@ -194,7 +194,7 @@ miss.pipe(read, uppercaser, write, function (err) {
 
 ### from
 
-#####`miss.from([opts], read)`
+##### `miss.from([opts], read)`
 
 Make a custom [readable stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_readable).
 
@@ -237,7 +237,7 @@ fromString('hello world').pipe(process.stdout)
 
 ### to
 
-#####`miss.to([options], write, [flush])`
+##### `miss.to([options], write, [flush])`
 
 Make a custom [writable stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_writable).
 
@@ -291,7 +291,7 @@ finished
 
 ### concat
 
-#####`var concat = miss.concat(cb)`
+##### `var concat = miss.concat(cb)`
 
 Returns a writable stream that concatenates all data written to the stream and calls a callback with the single result.
 
@@ -328,7 +328,7 @@ function handleError(err) {
 
 ### finished
 
-#####`miss.finished(stream, cb)`
+##### `miss.finished(stream, cb)`
 
 Waits for `stream` to finish or error and then calls `cb` with `(err)`. `cb` will only be called once. `err` will be null if the stream finished without error, or else it will be populated with the error from the streams `error` event.
 
@@ -354,7 +354,7 @@ miss.finished(copyDest, function(err) {
 
 ### parallel
 
-#####`miss.parallel(concurrency, each)`
+##### `miss.parallel(concurrency, each)`
 
 This works like `through` except you can process items in parallel, while still preserving the original input order.
 
