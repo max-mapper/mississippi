@@ -392,3 +392,6 @@ miss.pipe(
   })
 )
 ```
+#### license
+
+Licensed under the BSD 2-clause license.
