@@ -310,7 +310,14 @@ var fs = require('fs')
 var readStream = fs.createReadStream('cat.png')
 var concatStream = miss.concat(gotPicture)
 
-miss.pipe(readStream, concatStream, handleError)
+function callback (err) {
+  if (err) {
+    console.error(err)
+    process.exit(1)
+  }
+}
+
+miss.pipe(readStream, concatStream, callback)
 
 function gotPicture(imageBuffer) {
   // imageBuffer is all of `cat.png` as a node.js Buffer
