@@ -241,13 +241,13 @@ fromString('hello world').pipe(process.stdout)
 
 Make a custom [writable stream](https://nodejs.org/docs/latest/api/stream.html#stream_class_stream_writable).
 
-`opts` contains the options to pass on to the WritableStream constructor e.g. for creating a readable object stream (or use the shortcut `miss.to.obj([...])`).
+`opts` contains the options to pass on to the WritableStream constructor e.g. for creating a writable object stream (or use the shortcut `miss.to.obj([...])`).
 
 Returns a writable stream that calls `write(data, enc, cb)` when data is written to the stream.
 
 - `data` is the received data to write the destination.
 - `enc` encoding of the piece of data received.
-- `next(err, chunk)` should be called when you're ready to write more data, or encountered an error.
+- `cb(err, data)` should be called when you're ready to write more data, or encountered an error.
 
 `flush(cb)` is called before `finish` is emitted and allows for cleanup steps to occur.
 
