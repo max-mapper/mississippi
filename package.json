@@ -25,6 +25,7 @@
     "type": "git",
     "url": "git+https://github.com/maxogden/mississippi.git"
   },
+  "engines" : { "node" : ">=4.0.0" },
   "bugs": {
     "url": "https://github.com/maxogden/mississippi/issues"
   },
