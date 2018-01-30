@@ -4,8 +4,6 @@ a collection of useful stream utility modules. learn how the modules work using 
 
 the goal of the modules included in mississippi is to make working with streams easy without sacrificing speed, error handling or composability.
 
-see also [awesome-nodejs-streams](https://github.com/thejmazz/awesome-nodejs-streams)
-
 ## usage
 
 ```js
@@ -96,7 +94,7 @@ function done (err) {
 
 Builds a pipeline from all the transform streams passed in as arguments by piping them together and returning a single stream object that lets you write to the first stream and read from the last stream.
 
-If you are pumping object streams together use `pipeline = miss.pipeline.obj(s1, s2, ...)`. 
+If you are pumping object streams together use `pipeline = miss.pipeline.obj(s1, s2, ...)`.
 
 If any of the streams in the pipeline emits an error or gets destroyed, or you destroy the stream it returns, all of the streams will be destroyed and cleaned up for you.
 
@@ -388,7 +386,7 @@ function getResponse (item, cb) {
   r.on('response', function (re) {
     cb(null, {url: item.url, date: new Date(), status: re.statusCode, headers: re.headers})
     r.abort()
-  })  
+  })
 }
 
 miss.pipe(
@@ -401,6 +399,13 @@ miss.pipe(
   })
 )
 ```
-#### license
+
+## see also
+
+- [substack/stream-handbook](https://github.com/substack/stream-handbook)
+- [nodejs.org/api/stream.html](https://nodejs.org/api/stream.html)
+- [awesome-nodejs-streams](https://github.com/thejmazz/awesome-nodejs-streams)
+
+## license
 
 Licensed under the BSD 2-clause license.
