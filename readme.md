@@ -109,7 +109,7 @@ If any of the streams in the pipeline emits an error or gets destroyed, or you d
 var imageResize = require('image-resizer-stream')({width: 400})
 var pngOptimizer = require('png-optimizer-stream')({quality: 60})
 
-// instead of doing a.pipe(b), use pipelin
+// instead of doing a.pipe(b), use pipeline
 var resizeAndOptimize = miss.pipeline(imageResize, pngOptimizer)
 // `resizeAndOptimize` is a transform stream. when you write to it, it writes
 // to `imageResize`. when you read from it, it reads from `pngOptimizer`.
