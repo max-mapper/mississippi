@@ -367,7 +367,7 @@ This works like `through` except you can process items in parallel, while still 
 
 This is handy if you wanna take advantage of node's async I/O and process streams of items in batches. With this module you can build your very own streaming parallel job queue.
 
-Note that `miss.parallel` preserves input ordering, if you don't need that then you can use [through2-concurrent](https://github.com/almost/through2-concurrent) instead, which is very similar to this otherwise.
+Note that `miss.parallel` preserves input ordering. Passing the option `{ordered:false}` will output the data as soon as it's processed by a transform, without waiting to respect the order (this previously required a separate module [through2-concurrent](https://github.com/almost/through2-concurrent)).
 
 #### original module
 
