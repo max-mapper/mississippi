@@ -69,7 +69,7 @@ Optionally you can call `next` with an error to destroy the stream. You can also
 
 ```js
 var fs = require('fs')
-var split = require('split2')
+var split = require('binary-split')
 
 var newLineSeparatedNumbers = fs.createReadStream('numbers.txt')
 
